@@ -13,7 +13,8 @@ namespace DutyLogger
 {
     public partial class Form1 : Form
     {
-        private string saveDirectory;
+        private string saveDirectory, selectedDirectory;
+        private bool noDumpStored;
         string[] Sorority, Harris, FiveHundreds;
 
 
@@ -22,7 +23,22 @@ namespace DutyLogger
             InitializeComponent();
             saveDirectory = "C:\\Users\\Public\\DutyLogger\\";
             Directory.CreateDirectory(saveDirectory);
-            Sorority = new string[]
+
+
+            if (File.Exists(saveDirectory + "SavedDirectory.dump"))
+            {
+                selectedDirectory = File.ReadAllText(saveDirectory + "SavedDirectory.dump");
+                noDumpStored = false;
+            }
+            else
+            {
+                noDumpStored = true;
+                selectedDirectory = saveDirectory;
+            }
+
+
+
+            Sorority = new string[] //23
             {
                 "There was no disturbance in the three houses.",
                 "All the sorority houses were quite.",
@@ -49,7 +65,7 @@ namespace DutyLogger
                 "All was quiet in the houses."
             };
 
-            Harris = new string[]
+            Harris = new string[] //25
             {
                 "The RAs on duty reported to a lockout on the fourth floor.",
                 "Had a conversation with the security guard.",
@@ -63,7 +79,7 @@ namespace DutyLogger
                 "All residents were in their rooms and quiet.  Had a quick conversation with the security guard.",
                 "Had conversations with multiple residents about how their days were.",
                 "The RAs on duty had a quick conversation with two of the residents.  There were also two residents studying in the lounge.  All was quiet on the other floors.",
-                "Alexis and Brittany passed a resident on the second floor and had a quick conversation with them before wishing them a good night.",
+                "Passed a resident on the second floor and had a quick conversation with them before wishing them a good night.",
                 "Had a conversation with a resident about how his week was.  They did not see other residents on any of the other floors.",
                 "The RAs passed two residents coming back from getting Moes.  They had a quick conversation about their food options.",
                 "The RAs had a few conversations with residents coming back from Moes.  All was quiet on the other floors.",
@@ -78,7 +94,7 @@ namespace DutyLogger
                 "We spoke to a few residents returning to their rooms.  There were only light conversations that could be heard in the halls"
             };
 
-            FiveHundreds = new string[]
+            FiveHundreds = new string[] //27
             {
                 "Talked to the residents on the second floor of 501 about classes. The remaining buildings were quiet.",
                 "Outside of 507 the RAs on duty had a quick conversation with a resident as he was walking into the building.",
@@ -113,13 +129,65 @@ namespace DutyLogger
         //Make Log button
         private void button1_Click(object sender, EventArgs e)
         {
+            // 4 rounds, 1 of each
+            string fileToBeWritten = "";
+            Random rnd = new Random(); //  needs to be declared out of the loop because of how the seed works w/ system time.
+            int ticks;
 
+            for ( int counter = 0; counter < 4; counter++)
+            {
+                string creturn = "\r\n";
+
+                fileToBeWritten += "Round " + (counter + 1) + creturn ;
+
+                ticks = rnd.Next(0, 24);
+                fileToBeWritten += "Harris: " + Harris[ticks]  + creturn;
+
+                ticks = rnd.Next(0, 26);
+                fileToBeWritten += "500's: " + FiveHundreds[ticks] + creturn;
+
+                ticks = rnd.Next(0, 22);
+                fileToBeWritten += "Sorority's: " + Sorority[ticks] + creturn;
+
+                fileToBeWritten += creturn;
+            }
+            if (!noDumpStored)
+            {
+                File.WriteAllText(selectedDirectory + "ConvertedFile.docx", fileToBeWritten);
+                MessageBox.Show("Conversion Success! saved to " + selectedDirectory);
+
+            }
+            else
+            {
+                File.WriteAllText(saveDirectory + "ConvertedFile.docx", fileToBeWritten);
+                MessageBox.Show("Conversion Success! saved to " + saveDirectory);
+            }
         }
 
         //Default reset button
         private void button2_Click(object sender, EventArgs e)
         {
+            string directory = "";
+            DialogResult popupResult = MessageBox.Show("Please select a default folder to convert into.", "Alert", MessageBoxButtons.OK);
 
+            if (popupResult == DialogResult.OK)
+            {
+                var fD = new FolderBrowserDialog();
+
+                if (fD.ShowDialog() == DialogResult.OK)
+                {
+                    directory = fD.SelectedPath + "\\";
+                    File.WriteAllText(saveDirectory + "SavedDirectory.dump", directory);
+                    if (directory == "" || directory == null)
+                    {
+                        selectedDirectory = directory;// Save to default directory 
+                    }
+                }
+                else
+                {
+                    selectedDirectory = saveDirectory; // Save to default directory 
+                }
+            }
         }
     }
 }
