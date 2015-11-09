@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
 namespace DutyLogger
 {
     public partial class Form1 : Form
@@ -153,14 +154,21 @@ namespace DutyLogger
             }
             if (!noDumpStored)
             {
+                string fileNameAndPath = selectedDirectory + "ConvertedFile.docx";
                 File.WriteAllText(selectedDirectory + "ConvertedFile.docx", fileToBeWritten);
-                MessageBox.Show("Conversion Success! saved to " + selectedDirectory);
+                DialogResult popupResult = MessageBox.Show("Conversion Success! saved to " + selectedDirectory);
+                if (popupResult == DialogResult.OK)
+                    System.Diagnostics.Process.Start(fileNameAndPath);
 
             }
             else
             {
-                File.WriteAllText(saveDirectory + "ConvertedFile.docx", fileToBeWritten);
-                MessageBox.Show("Conversion Success! saved to " + saveDirectory);
+                string fileNameAndPath = saveDirectory + "ConvertedFile.docx";
+                File.WriteAllText(fileNameAndPath, fileToBeWritten);
+
+                DialogResult popupResult = MessageBox.Show("Conversion Success! saved to " + saveDirectory);
+                if(popupResult == DialogResult.OK)
+                    System.Diagnostics.Process.Start(fileNameAndPath);
             }
         }
 
