@@ -154,8 +154,8 @@ namespace DutyLogger
             }
             if (!noDumpStored)
             {
-                string fileNameAndPath = selectedDirectory + "ConvertedFile.docx";
-                File.WriteAllText(selectedDirectory + "ConvertedFile.docx", fileToBeWritten);
+                string fileNameAndPath = selectedDirectory + "ConvertedFile.txt";
+                File.WriteAllText(selectedDirectory + "ConvertedFile.txt", fileToBeWritten);
                 DialogResult popupResult = MessageBox.Show("Conversion Success! saved to " + selectedDirectory);
                 if (popupResult == DialogResult.OK)
                     System.Diagnostics.Process.Start(fileNameAndPath);
