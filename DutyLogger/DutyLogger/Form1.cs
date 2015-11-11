@@ -163,7 +163,7 @@ namespace DutyLogger
             }
             else
             {
-                string fileNameAndPath = saveDirectory + "ConvertedFile.docx";
+                string fileNameAndPath = saveDirectory + "ConvertedFile.txt";
                 File.WriteAllText(fileNameAndPath, fileToBeWritten);
 
                 DialogResult popupResult = MessageBox.Show("Conversion Success! saved to " + saveDirectory);
