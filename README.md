@@ -1,2 +1,2 @@
 # DutyLogger
-quick program for someone
+quick program for fast generation of fake log files
